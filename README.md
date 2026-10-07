@@ -95,21 +95,48 @@ Until then, looks can be added by committing Markdown files directly.
 
 ## Deploying
 
+Live at **https://fitinspobykristina.com** — repo
+[adhikariReason/fitinspo](https://github.com/adhikariReason/fitinspo).
+
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and
-publishes to GitHub Pages. One-time setup in the repo: **Settings → Pages →
-Source → GitHub Actions**.
+publishes to GitHub Pages. Pages is already enabled with **GitHub Actions** as
+the source and the custom domain set, so no further setup is needed.
 
-### Two things to decide before launch
+### DNS (Namecheap)
 
-1. **The domain.** `astro.config.mjs` (`site:`), `public/CNAME` and
-   `public/robots.txt` all currently say `fitinspobykristina.com`, which has not
-   been checked for availability. Update all three, or delete `public/CNAME` to
-   serve from the `github.io` URL.
-2. **Private repo vs. free Pages.** GitHub Pages only serves from a *private*
-   repo on a paid plan (Pro/Team or above). On the free plan the repo has to be
-   public for the site to be published. Since the content here is destined to be
-   public anyway, a public repo is the cheaper option — but it is a real choice,
-   not an oversight.
+The domain is registered at Namecheap on Basic DNS. In **Domain List → Manage →
+Advanced DNS**, the host records must be:
+
+| Type | Host | Value |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `adhikarireason.github.io.` |
+
+Delete Namecheap's default parking records first — the `A` record pointing at
+`162.255.119.165`, the `CNAME` for `www` pointing at `parkingpage.namecheap.com`,
+and any **URL Redirect** record. Leaving them in place is what keeps the parking
+page showing.
+
+Propagation usually takes 30 minutes or so. Check it with:
+
+```bash
+dig +short fitinspobykristina.com A
+```
+
+Once that returns the four `185.199.x.153` addresses, GitHub provisions a TLS
+certificate automatically (a few more minutes). Then turn on **Settings → Pages
+→ Enforce HTTPS**.
+
+### Moving the site somewhere else
+
+`site` and `base` in `astro.config.mjs` are the only two values that decide
+where the site lives. Every internal link and image goes through `path()` in
+`src/data/site.ts`, so serving from a sub-path (a GitHub project page, say)
+means setting `base: '/fitinspo'` and changing nothing else. Keep
+`public/CNAME`, `public/robots.txt` and the Pages custom domain in step with it.
 
 ## Layout
 
@@ -149,7 +176,9 @@ Deliberately left for later, per the spec:
   Adding Pagefind is the remaining work; nothing else has to change.
 - **Real photos and Amazon links.** The four sample looks use generated SVG
   placeholders at `public/images/looks/` and `PLACEHOLDER` product URLs.
-- **The affiliate tag**, the domain, and the final category list.
+- **The affiliate tag** (`AMAZON_TAG` in `src/data/site.ts`) and the final
+  category list.
+- **Decap in production**, which still needs the OAuth proxy described above.
 
 ## Accessibility and SEO notes
 
