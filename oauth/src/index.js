@@ -42,6 +42,10 @@ function handleAuth(url, env) {
   const state = crypto.randomUUID();
   const params = new URLSearchParams({
     client_id: env.GITHUB_CLIENT_ID,
+    // Sent explicitly: GitHub requires it once an app has more than one
+    // redirect URI registered, and naming it turns a vague 404 into a precise
+    // "redirect_uri mismatch". It must equal the app's registered callback.
+    redirect_uri: `${url.origin}/callback`,
     scope: url.searchParams.get('scope') || 'repo,user',
     state,
   });
