@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../data/site';
+import { SITE, path } from '../data/site';
 
 interface Props {
   title: string;
@@ -30,8 +30,8 @@ const fullTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
 {ogImage && <meta property="og:image" content={ogImage} />}
 <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
 
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" href={path('/favicon.svg')} type="image/svg+xml" />
+<link rel="sitemap" href={path('/sitemap-index.xml')} />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link

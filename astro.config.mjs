@@ -1,10 +1,16 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// The production URL. Change this (and public/CNAME) once the domain is confirmed.
-// It is used for canonical URLs, Open Graph images and sitemap.xml.
+// Where the site is served from. Used for canonical URLs, Open Graph images
+// and sitemap.xml. The domain must match public/CNAME and the Pages custom
+// domain setting.
+//
+// `base` is '/' on a custom domain. Every internal link goes through `path()`
+// in src/data/site.ts, so moving to or from a project-page sub-path only means
+// changing these two lines.
 export default defineConfig({
   site: 'https://fitinspobykristina.com',
+  base: '/',
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [

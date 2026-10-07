@@ -3,6 +3,18 @@
  */
 
 /**
+ * Prefix an internal path with the site's base path.
+ *
+ * On a GitHub project page the site is served from `/<repo>/`, not `/`, so
+ * every internal link has to carry that prefix. Once the custom domain is in
+ * place, set `base: '/'` in astro.config.mjs and this becomes a no-op — no
+ * link has to change.
+ */
+export function path(p: string): string {
+  return `${import.meta.env.BASE_URL.replace(/\/$/, '')}${p}`;
+}
+
+/**
  * Amazon Associates tracking tag. Appended to every outgoing Amazon link at
  * render time by `amazonLink()`, so no link in the content files has to carry it.
  * Replace with the real tag before launch.

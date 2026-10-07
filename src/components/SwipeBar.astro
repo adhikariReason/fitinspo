@@ -1,9 +1,11 @@
 ---
 /** Sticky bottom call to action that opens the swipe browser. */
+import { path } from '../data/site';
+
 interface Props {
   href?: string;
 }
-const { href = '/swipe/' } = Astro.props;
+const { href = path('/swipe/') } = Astro.props;
 ---
 <div class="swipe-bar">
   <a href={href}>

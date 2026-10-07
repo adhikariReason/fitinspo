@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import SaveButton from './SaveButton.astro';
-import { categoryLabel } from '../data/site';
+import { categoryLabel, path } from '../data/site';
 
 interface Props {
   look: CollectionEntry<'looks'>;
@@ -15,10 +15,10 @@ const { look, small = false, eager = false } = Astro.props;
 const d = look.data;
 ---
 <article class:list={['tile', small && 'tile--sm']}>
-  <a class="tile__link" href={`/looks/${d.slug}/`}>
+  <a class="tile__link" href={path(`/looks/${d.slug}/`)}>
     <div class="tile__photo" style={`background: ${d.placeholder_bg}`}>
       <img
-        src={d.hero_image}
+        src={path(d.hero_image)}
         alt={d.hero_alt}
         width="800"
         height="1200"

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Heart from '../components/Heart.astro';
 import { allLooks } from '../data/looks';
-import { CATEGORIES } from '../data/site';
+import { CATEGORIES, path } from '../data/site';
 import type { SwipeCategory } from '../scripts/swipe';
 
 const looks = await allLooks();
@@ -20,9 +20,9 @@ const categories: SwipeCategory[] = CATEGORIES.map((c) => ({
       count: l.data.items.length,
       bg: l.data.placeholder_bg,
       ink: l.data.placeholder_ink,
-      image: l.data.hero_image,
+      image: path(l.data.hero_image),
       alt: l.data.hero_alt,
-      url: `/looks/${l.data.slug}/`,
+      url: path(`/looks/${l.data.slug}/`),
     })),
 })).filter((c) => c.looks.length > 0);
 
@@ -38,7 +38,7 @@ const firstLook = first?.looks[0];
 >
   <div class="sw" data-swipe>
     <header class="sw__top">
-      <a class="icon-btn" href="/" aria-label="Back to all looks">
+      <a class="icon-btn" href={path('/')} aria-label="Back to all looks">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
       </a>
       <div class="sw__title">

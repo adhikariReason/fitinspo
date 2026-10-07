@@ -4,7 +4,7 @@
 
 backend:
   name: github
-  repo: OWNER/REPO # <-- set to your GitHub owner/repo after creating it
+  repo: adhikariReason/fitinspo
   branch: main
   # Decap cannot talk to GitHub's OAuth endpoint directly from the browser.
   # Point this at your own OAuth proxy, or delete it if you host one elsewhere.

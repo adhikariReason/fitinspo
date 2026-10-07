@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
 import LookTile from '../components/LookTile.astro';
 import { allLooks } from '../data/looks';
+import { path } from '../data/site';
 
 /**
  * Every look is rendered, then hidden on load and revealed if its slug is in
@@ -22,7 +23,7 @@ const looks = await allLooks();
     <p class="empty" data-saved-empty hidden>
       Nothing saved yet. Tap the heart on any look to keep it here.
       <br /><br />
-      <a href="/" style="text-decoration:underline">Browse all looks</a>
+      <a href={path('/')} style="text-decoration:underline">Browse all looks</a>
     </p>
 
     <div class="grid" data-saved-grid>

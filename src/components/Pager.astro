@@ -1,4 +1,6 @@
 ---
+import { path } from '../data/site';
+
 interface Props {
   page: number;
   total: number;
@@ -6,7 +8,7 @@ interface Props {
 const { page, total } = Astro.props;
 
 /** Page 1 lives at `/`; later pages at `/page/2/`. */
-const href = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
+const href = (n: number) => path(n === 1 ? '/' : `/page/${n}/`);
 ---
 {
   total > 1 && (

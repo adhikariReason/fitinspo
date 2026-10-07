@@ -4,7 +4,7 @@ import SaveButton from '../../components/SaveButton.astro';
 import Botanical from '../../components/Botanical.astro';
 import LookTile from '../../components/LookTile.astro';
 import { allLooks, relatedLooks } from '../../data/looks';
-import { SITE, amazonLink, categoryLabel, tagLabel, DISCLOSURE_SHORT } from '../../data/site';
+import { SITE, amazonLink, categoryLabel, tagLabel, path, DISCLOSURE_SHORT } from '../../data/site';
 
 export async function getStaticPaths() {
   const looks = await allLooks();
@@ -21,7 +21,7 @@ const jsonLd = {
   '@type': 'Article',
   headline: d.title,
   description: d.intro,
-  image: new URL(d.hero_image, Astro.site).toString(),
+  image: new URL(path(d.hero_image), Astro.site).toString(),
   datePublished: d.date.toISOString(),
   author: { '@type': 'Person', name: 'Kristina' },
   publisher: { '@type': 'Organization', name: SITE.name },
@@ -29,9 +29,9 @@ const jsonLd = {
 };
 ---
 
-<Base title={d.title} description={d.intro} image={d.hero_image}>
+<Base title={d.title} description={d.intro} image={path(d.hero_image)}>
   <header class="topbar">
-    <a class="topbar__back" href="/">
+    <a class="topbar__back" href={path('/')}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
       All looks
     </a>
@@ -46,7 +46,7 @@ const jsonLd = {
   <main id="main">
     <section class="hero" aria-label="Look photo">
       <div class="hero__frame" style={`background: ${d.placeholder_bg}`}>
-        <img class="hero__img" src={d.hero_image} alt={d.hero_alt} width="800" height="1200" fetchpriority="high" />
+        <img class="hero__img" src={path(d.hero_image)} alt={d.hero_alt} width="800" height="1200" fetchpriority="high" />
         <span class="script hero__note" style={`color: ${d.placeholder_ink}`}>{d.note}</span>
         <SaveButton slug={d.slug} />
       </div>
@@ -110,8 +110,8 @@ const jsonLd = {
 
     <nav class="more" aria-label="Browse" style="padding-top:8px">
       <div class="chips" style="padding-left:0;padding-right:0">
-        <a class="chip" href={`/category/${d.category}/`}>{categoryLabel(d.category)}</a>
-        {d.tags.map((t) => <a class="chip" href={`/tag/${t}/`}>{tagLabel(t)}</a>)}
+        <a class="chip" href={path(`/category/${d.category}/`)}>{categoryLabel(d.category)}</a>
+        {d.tags.map((t) => <a class="chip" href={path(`/tag/${t}/`)}>{tagLabel(t)}</a>)}
       </div>
     </nav>
   </main>

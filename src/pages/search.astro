@@ -4,7 +4,7 @@ import Masthead from '../components/Masthead.astro';
 import SearchBar from '../components/SearchBar.astro';
 import CategoryChips from '../components/CategoryChips.astro';
 import { allTags } from '../data/looks';
-import { tagLabel } from '../data/site';
+import { tagLabel, path } from '../data/site';
 
 /**
  * Placeholder results page. Search is a post-launch item (spec 3): wiring
@@ -23,7 +23,7 @@ const tags = await allTags();
       Search isn't switched on yet. In the meantime, browse by category above or by tag below.
     </p>
     <div class="chips" style="padding-left:0;padding-right:0;flex-wrap:wrap">
-      {tags.map((t) => <a class="chip" href={`/tag/${t.slug}/`}>{tagLabel(t.slug)} ({t.count})</a>)}
+      {tags.map((t) => <a class="chip" href={path(`/tag/${t.slug}/`)}>{tagLabel(t.slug)} ({t.count})</a>)}
     </div>
   </main>
 </Base>

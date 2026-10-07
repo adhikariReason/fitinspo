@@ -6,7 +6,7 @@ import CategoryChips from '../../components/CategoryChips.astro';
 import Feed from '../../components/Feed.astro';
 import SwipeBar from '../../components/SwipeBar.astro';
 import { allLooks } from '../../data/looks';
-import { CATEGORIES, categoryLabel } from '../../data/site';
+import { CATEGORIES, categoryLabel, path } from '../../data/site';
 
 export async function getStaticPaths() {
   const looks = await allLooks();
@@ -34,5 +34,5 @@ const label = categoryLabel(category!);
     <h1 class="masthead__mark" style="font-size:28px;margin:0 0 14px">{label} outfits</h1>
     <Feed looks={looks} />
   </main>
-  <SwipeBar href={`/swipe/?category=${category}`} />
+  <SwipeBar href={path(`/swipe/?category=${category}`)} />
 </Base>

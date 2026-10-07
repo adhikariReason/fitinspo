@@ -3,9 +3,10 @@
  * Search field. Pagefind is a post-launch item (spec 3), so this posts to
  * /search/ and is marked up but not yet wired to an index.
  */
+import { path } from '../data/site';
 ---
 <div class="searchbar">
-  <form class="searchbar__inner" role="search" action="/search/" method="get">
+  <form class="searchbar__inner" role="search" action={path('/search/')} method="get">
     <label class="visually-hidden" for="q">Search looks</label>
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--taupe)" stroke-width="2" stroke-linecap="round" aria-hidden="true">
       <circle cx="11" cy="11" r="6.5"></circle>

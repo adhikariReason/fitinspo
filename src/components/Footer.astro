@@ -1,13 +1,13 @@
 ---
-import { SITE } from '../data/site';
+import { SITE, path } from '../data/site';
 ---
 <footer class="site-footer">
   <span class="site-footer__mark">
     {SITE.wordmark} <span class="site-footer__by">{SITE.byline}</span>
   </span>
   <nav aria-label="Footer">
-    <a href="/disclosure/">Disclosure</a>
-    <a href="/">All looks</a>
-    <a href="/saved/">Saved looks</a>
+    <a href={path('/disclosure/')}>Disclosure</a>
+    <a href={path('/')}>All looks</a>
+    <a href={path('/saved/')}>Saved looks</a>
   </nav>
 </footer>

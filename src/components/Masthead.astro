@@ -1,6 +1,6 @@
 ---
 import Heart from './Heart.astro';
-import { SITE } from '../data/site';
+import { SITE, path } from '../data/site';
 
 interface Props {
   /** `h1` on the home page, `p` elsewhere so each page has one h1. */
@@ -14,7 +14,7 @@ const Tag = heading ? 'h1' : 'p';
     <span class="masthead__mark">{SITE.wordmark}</span>
     <span class="masthead__by">{SITE.byline}</span>
   </Tag>
-  <a class="saved-link" href="/saved/" aria-label="Saved looks">
+  <a class="saved-link" href={path('/saved/')} aria-label="Saved looks">
     <Heart size={20} />
     <span class="saved-badge" data-saved-count data-count="0" aria-hidden="true">0</span>
   </a>
