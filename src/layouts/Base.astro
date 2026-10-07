@@ -1,0 +1,35 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Pages that supply their own chrome (the swipe browser) hide the footer. */
+  footer?: boolean;
+  bodyClass?: string;
+}
+
+const { title, description, image, noindex, footer = true, bodyClass } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} noindex={noindex} />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="shell">
+      <slot />
+      {footer && <Footer />}
+    </div>
+    <script>
+      import { initSaves } from '../scripts/saves';
+      initSaves();
+    </script>
+  </body>
+</html>

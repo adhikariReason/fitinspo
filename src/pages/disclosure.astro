@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+---
+
+<Base
+  title="Disclosure"
+  description="Affiliate disclosure for Fit Inspo by Kristina, a participant in the Amazon Services LLC Associates Program."
+>
+  <header class="topbar">
+    <a class="topbar__back" href="/">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      Back
+    </a>
+    <span class="topbar__mark">{SITE.wordmark}</span>
+    <span class="topbar__spacer"></span>
+  </header>
+
+  <main id="main" class="prose">
+    <h1>Disclosure</h1>
+    <p>
+      Fit Inspo by Kristina is reader-supported. When you buy through links on our site, we may earn
+      an affiliate commission at no extra cost to you.
+    </p>
+    <p>
+      Fit Inspo by Kristina is a participant in the Amazon Services LLC Associates Program, an
+      affiliate advertising program designed to provide a means for sites to earn advertising fees by
+      advertising and linking to Amazon.com. As an Amazon Associate, we earn from qualifying
+      purchases.
+    </p>
+    <p>
+      The prices and availability of products are accurate as of the date and time indicated and are
+      subject to change. Any price and availability information displayed on Amazon at the time of
+      purchase will apply to the purchase of the product.
+    </p>
+    <p>
+      We only recommend products we genuinely think you'll love. Thank you for supporting Fit Inspo
+      by Kristina.
+    </p>
+    <span class="signoff">xo, Kristina</span>
+  </main>
+</Base>

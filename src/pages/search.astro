@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import SearchBar from '../components/SearchBar.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import { allTags } from '../data/looks';
+import { tagLabel } from '../data/site';
+
+/**
+ * Placeholder results page. Search is a post-launch item (spec 3): wiring
+ * Pagefind in here is the only change needed, the field already points at it.
+ */
+const tags = await allTags();
+---
+
+<Base title="Search" description="Search every look on Fit Inspo by Kristina." noindex>
+  <Masthead />
+  <SearchBar />
+  <CategoryChips active="all" />
+  <main id="main" class="feed">
+    <h1 class="masthead__mark" style="font-size:26px;margin:8px 0 10px">Search</h1>
+    <p class="tile__sub">
+      Search isn't switched on yet. In the meantime, browse by category above or by tag below.
+    </p>
+    <div class="chips" style="padding-left:0;padding-right:0;flex-wrap:wrap">
+      {tags.map((t) => <a class="chip" href={`/tag/${t.slug}/`}>{tagLabel(t.slug)} ({t.count})</a>)}
+    </div>
+  </main>
+</Base>

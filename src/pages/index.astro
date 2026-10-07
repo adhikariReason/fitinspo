@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import SearchBar from '../components/SearchBar.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import Feed from '../components/Feed.astro';
+import Pager from '../components/Pager.astro';
+import SwipeBar from '../components/SwipeBar.astro';
+import { allLooks, pageSlice } from '../data/looks';
+import { SITE } from '../data/site';
+
+const { items, total } = pageSlice(await allLooks(), 1);
+---
+
+<Base title={SITE.name} description={SITE.description}>
+  <Masthead heading />
+  <SearchBar />
+  <CategoryChips active="all" />
+  <main id="main" class="feed">
+    <Feed looks={items} emptyMessage="No looks published yet." />
+    <Pager page={1} total={total} />
+  </main>
+  <SwipeBar />
+</Base>

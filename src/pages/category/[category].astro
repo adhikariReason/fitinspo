@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import CategoryChips from '../../components/CategoryChips.astro';
+import Feed from '../../components/Feed.astro';
+import SwipeBar from '../../components/SwipeBar.astro';
+import { allLooks } from '../../data/looks';
+import { CATEGORIES, categoryLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const looks = await allLooks();
+  // Every configured category gets a page, even an empty one, so the URL in a
+  // pin never 404s while Kristina is still filling it in.
+  return CATEGORIES.map((c) => ({
+    params: { category: c.slug },
+    props: { looks: looks.filter((l) => l.data.category === c.slug) },
+  }));
+}
+
+const { category } = Astro.params;
+const { looks } = Astro.props;
+const label = categoryLabel(category!);
+---
+
+<Base
+  title={`${label} outfits`}
+  description={`Shoppable ${label.toLowerCase()} outfit ideas, broken down piece by piece.`}
+>
+  <Masthead />
+  <SearchBar />
+  <CategoryChips active={category!} />
+  <main id="main" class="feed">
+    <h1 class="masthead__mark" style="font-size:28px;margin:0 0 14px">{label} outfits</h1>
+    <Feed looks={looks} />
+  </main>
+  <SwipeBar href={`/swipe/?category=${category}`} />
+</Base>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /saved/
+Disallow: /search/
+
+Sitemap: https://fitinspobykristina.com/sitemap-index.xml

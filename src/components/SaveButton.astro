@@ -1,0 +1,23 @@
+---
+import Heart from './Heart.astro';
+
+/**
+ * Save-to-localStorage heart. Renders unpressed; `saves.ts` sets the real state
+ * on load, so the markup stays cacheable and static.
+ */
+interface Props {
+  slug: string;
+  variant?: 'hero' | 'tile';
+  size?: number;
+}
+const { slug, variant = 'hero', size = variant === 'tile' ? 20 : 22 } = Astro.props;
+---
+<button
+  type="button"
+  class:list={['save-btn', variant === 'tile' && 'save-btn--tile']}
+  data-save={slug}
+  aria-pressed="false"
+  aria-label="Save this look"
+>
+  <Heart size={size} />
+</button>

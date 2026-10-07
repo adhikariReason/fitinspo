@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SaveButton from './SaveButton.astro';
+import { categoryLabel } from '../data/site';
+
+interface Props {
+  look: CollectionEntry<'looks'>;
+  /** Smaller variant used in "You might also like". */
+  small?: boolean;
+  /** Tiles below the fold load lazily; the first row should not. */
+  eager?: boolean;
+}
+
+const { look, small = false, eager = false } = Astro.props;
+const d = look.data;
+---
+<article class:list={['tile', small && 'tile--sm']}>
+  <a class="tile__link" href={`/looks/${d.slug}/`}>
+    <div class="tile__photo" style={`background: ${d.placeholder_bg}`}>
+      <img
+        src={d.hero_image}
+        alt={d.hero_alt}
+        width="800"
+        height="1200"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+      <span class="script tile__note" style={`color: ${d.placeholder_ink}`}>{d.note}</span>
+    </div>
+    <div class="tile__meta">
+      <span class="tile__title">{d.title}</span>
+      <span class="tile__sub">{categoryLabel(d.category)} · {d.items.length} pieces</span>
+    </div>
+  </a>
+  <SaveButton slug={d.slug} variant="tile" />
+</article>

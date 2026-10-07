@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Placeholder for good things take time">
+  <rect width="800" height="1200" fill="#CDB59D"/>
+  <g fill="none" stroke="#3E2A20" stroke-opacity="0.22" stroke-width="3">
+    <rect x="150" y="190" width="500" height="420" rx="24"/>
+    <path d="M150 400h500M400 190v420"/>
+    <circle cx="400" cy="810" r="110"/>
+  </g>
+  <text x="400" y="1010" fill="#3E2A20" fill-opacity="0.75" font-family="Karla, Helvetica, Arial, sans-serif" font-size="30" text-anchor="middle">pin photo placeholder</text>
+  <text x="400" y="1060" fill="#3E2A20" fill-opacity="0.55" font-family="Karla, Helvetica, Arial, sans-serif" font-size="24" text-anchor="middle">800 &#215; 1200 (2:3)</text>
+</svg>

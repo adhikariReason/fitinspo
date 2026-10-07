@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import CategoryChips from '../../components/CategoryChips.astro';
+import Feed from '../../components/Feed.astro';
+import Pager from '../../components/Pager.astro';
+import SwipeBar from '../../components/SwipeBar.astro';
+import { allLooks, pageSlice, PAGE_SIZE } from '../../data/looks';
+import { SITE } from '../../data/site';
+
+export async function getStaticPaths() {
+  const looks = await allLooks();
+  const total = Math.max(1, Math.ceil(looks.length / PAGE_SIZE));
+  // Page 1 is `/`, so only 2..n are generated here.
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.page);
+const { items, total } = pageSlice(await allLooks(), page);
+---
+
+<Base title={`All looks — page ${page}`} description={SITE.description}>
+  <Masthead />
+  <SearchBar />
+  <CategoryChips active="all" />
+  <main id="main" class="feed">
+    <h1 class="visually-hidden">All looks, page {page}</h1>
+    <Feed looks={items} />
+    <Pager page={page} total={total} />
+  </main>
+  <SwipeBar />
+</Base>

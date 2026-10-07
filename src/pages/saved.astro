@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import LookTile from '../components/LookTile.astro';
+import { allLooks } from '../data/looks';
+
+/**
+ * Every look is rendered, then hidden on load and revealed if its slug is in
+ * localStorage. Keeps the page static while still being per-browser.
+ */
+const looks = await allLooks();
+---
+
+<Base title="Saved looks" description="The looks you've saved on this device." noindex>
+  <Masthead />
+  <main id="main" class="feed">
+    <h1 class="masthead__mark" style="font-size:28px;margin:14px 0 6px">Saved looks</h1>
+    <p class="tile__sub" style="margin:0 0 18px">
+      Saved on this device only, so they're gone if you clear your browser data.
+    </p>
+
+    <p class="empty" data-saved-empty hidden>
+      Nothing saved yet. Tap the heart on any look to keep it here.
+      <br /><br />
+      <a href="/" style="text-decoration:underline">Browse all looks</a>
+    </p>
+
+    <div class="grid" data-saved-grid>
+      {looks.map((look) => <div data-slug={look.data.slug} hidden><LookTile look={look} /></div>)}
+    </div>
+  </main>
+
+  <script>
+    import { readSaved } from '../scripts/saves';
+
+    function render() {
+      const saved = new Set(readSaved());
+      let shown = 0;
+      for (const wrapper of document.querySelectorAll<HTMLElement>('[data-slug]')) {
+        const on = saved.has(wrapper.dataset.slug ?? '');
+        wrapper.hidden = !on;
+        if (on) shown++;
+      }
+      const empty = document.querySelector<HTMLElement>('[data-saved-empty]');
+      const grid = document.querySelector<HTMLElement>('[data-saved-grid]');
+      if (empty) empty.hidden = shown > 0;
+      if (grid) grid.hidden = shown === 0;
+    }
+
+    render();
+    // Un-hearting a look here should remove it from the list straight away.
+    document.addEventListener('fitinspo:saveschange', render);
+  </script>
+</Base>

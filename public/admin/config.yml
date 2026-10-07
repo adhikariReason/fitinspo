@@ -1,0 +1,163 @@
+# Decap CMS — commits looks straight to the repo as Markdown files. No server,
+# no database. See README.md ("Editing with the CMS") for the one-time OAuth
+# setup the GitHub backend needs.
+
+backend:
+  name: github
+  repo: OWNER/REPO # <-- set to your GitHub owner/repo after creating it
+  branch: main
+  # Decap cannot talk to GitHub's OAuth endpoint directly from the browser.
+  # Point this at your own OAuth proxy, or delete it if you host one elsewhere.
+  base_url: https://REPLACE-WITH-YOUR-OAUTH-PROXY
+
+# `npx decap-server` + `npm run dev` lets you edit locally without any OAuth.
+local_backend: true
+
+media_folder: public/images/looks
+public_folder: /images/looks
+
+publish_mode: editorial_workflow
+site_url: https://fitinspobykristina.com
+display_url: https://fitinspobykristina.com
+
+collections:
+  - name: looks
+    label: Looks
+    label_singular: Look
+    folder: src/content/looks
+    create: true
+    # Filename is cosmetic; the permanent URL comes from the `slug` field.
+    slug: '{{fields.slug}}'
+    identifier_field: title
+    summary: '{{title}} — {{category}}'
+    sortable_fields: [date, title, category]
+    editor:
+      preview: false
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: Descriptive and search-friendly, e.g. "Brown + cream coffee date outfit".
+
+      - label: Slug (permanent URL)
+        name: slug
+        widget: string
+        pattern:
+          - '^[a-z0-9]+(-[a-z0-9]+)*$'
+          - Lowercase letters, numbers and hyphens only.
+        hint: >
+          NEVER change this once the look is published — your pins link to it forever.
+
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        picker_utc: true
+
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: 'Coffee date', value: 'coffee-date' }
+          - { label: 'Date night', value: 'date-night' }
+          - { label: 'Work', value: 'work' }
+          - { label: 'Weekend', value: 'weekend' }
+        hint: Occasion. Also the up/down axis in the swipe browser.
+
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: >
+          Lowercase and hyphenated: color story (brown-and-cream), vibe (cozy, classy),
+          season (fall), budget (under-50), plus-size.
+
+      - label: Handwritten note
+        name: note
+        widget: string
+        hint: The caption over the photo. Match the text on the pin, e.g. "coffee date outfit ♡".
+
+      - label: Hero image
+        name: hero_image
+        widget: image
+        media_library:
+          config:
+            multiple: false
+        hint: The same image as the Pinterest pin. 2:3 portrait.
+
+      - label: Hero alt text
+        name: hero_alt
+        widget: string
+        hint: Describe what is in the photo. Required — this is read aloud and read by Google.
+
+      - label: Placeholder background
+        name: placeholder_bg
+        widget: color
+        default: '#E6D7C4'
+        required: false
+        hint: Tint shown behind the photo while it loads, and on the swipe cards.
+
+      - label: Placeholder ink
+        name: placeholder_ink
+        widget: color
+        default: '#4B3224'
+        required: false
+        hint: Color of the handwritten note over the photo. Use a light value on a dark photo.
+
+      - label: Color story
+        name: color_story
+        widget: list
+        required: false
+        default: []
+        field: { label: Color, name: color, widget: color }
+        hint: Three or four hex colors, light to dark.
+
+      - label: Color story label
+        name: color_story_label
+        widget: string
+        required: false
+        hint: e.g. "brown and cream".
+
+      - label: Intro
+        name: intro
+        widget: text
+        hint: Two sentences. Also used as the meta description and the share text.
+
+      - label: Pieces to shop
+        name: items
+        widget: list
+        label_singular: Piece
+        summary: '{{fields.name}}'
+        min: 1
+        fields:
+          - { label: Name, name: name, widget: string, hint: 'No brand name unless the link is that brand.' }
+          - { label: One-line note, name: note, widget: string, hint: 'Natural sentence. No keyword stuffing.' }
+          - label: Amazon URL
+            name: amazon_url
+            widget: string
+            hint: >
+              Plain product URL. The affiliate tag is added automatically at build
+              time, so you do not need to paste it here.
+
+      - label: Related looks
+        name: related
+        widget: list
+        required: false
+        default: []
+        field: { label: Slug, name: slug, widget: string }
+        hint: Optional. Leave empty to pick related looks automatically by tag and category.
+
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Drafts are left out of the built site.
+
+      - label: Body (optional)
+        name: body
+        widget: markdown
+        required: false
+        hint: Extra styling notes. Not shown in the current design.

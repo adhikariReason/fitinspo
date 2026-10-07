@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import LookTile from './LookTile.astro';
+
+interface Props {
+  looks: CollectionEntry<'looks'>[];
+  emptyMessage?: string;
+}
+const { looks, emptyMessage = 'No looks in this category yet. Pick another one above.' } = Astro.props;
+---
+{
+  looks.length === 0 ? (
+    <p class="empty">{emptyMessage}</p>
+  ) : (
+    <div class="grid">
+      {looks.map((look, i) => <LookTile look={look} eager={i < 2} />)}
+    </div>
+  )
+}

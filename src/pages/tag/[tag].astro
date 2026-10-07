@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import Feed from '../../components/Feed.astro';
+import SwipeBar from '../../components/SwipeBar.astro';
+import { allLooks, allTags } from '../../data/looks';
+import { tagLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const looks = await allLooks();
+  const tags = await allTags();
+  return tags.map((t) => ({
+    params: { tag: t.slug },
+    props: { looks: looks.filter((l) => l.data.tags.includes(t.slug)) },
+  }));
+}
+
+const { tag } = Astro.params;
+const { looks } = Astro.props;
+const label = tagLabel(tag!);
+---
+
+<Base title={`${label} outfits`} description={`Every ${label} look on Fit Inspo by Kristina.`}>
+  <Masthead />
+  <SearchBar />
+  <main id="main" class="feed">
+    <h1 class="masthead__mark" style="font-size:28px;margin:18px 0 14px">{label}</h1>
+    <Feed looks={looks} />
+  </main>
+  <SwipeBar />
+</Base>
