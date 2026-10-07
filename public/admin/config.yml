@@ -10,7 +10,7 @@ backend:
   # own, so it delegates to the Cloudflare Worker in ../../oauth/. Set this to
   # the URL `wrangler deploy` prints (no trailing slash, no path) — Decap appends
   # /auth itself. See oauth/README.md.
-  base_url: https://REPLACE-WITH-YOUR-WORKER-URL
+  base_url: https://fitinspo-cms-auth.reason-adhikari888.workers.dev
 
 # `npx decap-server` + `npm run dev` lets you edit locally without any OAuth.
 local_backend: true

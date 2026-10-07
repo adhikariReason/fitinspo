@@ -16,8 +16,14 @@ You need a free Cloudflare account and a GitHub OAuth app.
 npx wrangler deploy
 ```
 
-Wrangler prints the URL, e.g. `https://fitinspo-cms-auth.<subdomain>.workers.dev`.
-Call that `<WORKER_URL>`.
+Wrangler prints the URL. For this account it is:
+
+```
+https://fitinspo-cms-auth.reason-adhikari888.workers.dev
+```
+
+If the account has no `workers.dev` subdomain yet, the first deploy stops and
+prints a dashboard link to register one. That is a one-time account setting.
 
 **2. Create the GitHub OAuth app** at
 <https://github.com/settings/developers> → *New OAuth App*:
@@ -26,7 +32,7 @@ Call that `<WORKER_URL>`.
 |---|---|
 | Application name | Fit Inspo CMS |
 | Homepage URL | `https://fitinspobykristina.com` |
-| Authorization callback URL | `<WORKER_URL>/callback` |
+| Authorization callback URL | `https://fitinspo-cms-auth.reason-adhikari888.workers.dev/callback` |
 
 The callback URL must match exactly, including `/callback`.
 
@@ -45,7 +51,7 @@ backend:
   name: github
   repo: adhikariReason/fitinspo
   branch: main
-  base_url: <WORKER_URL>
+  base_url: https://fitinspo-cms-auth.reason-adhikari888.workers.dev
 ```
 
 Commit and push; the deploy workflow publishes it.
@@ -63,7 +69,7 @@ If it fails:
 - **"State mismatch"** — cookies are being blocked for the Worker domain, or the
   login took more than 10 minutes. Try again.
 - **"bad_verification_code"** — the callback URL on the GitHub app does not match
-  `<WORKER_URL>/callback`.
+  the Worker's `/callback`, or the client ID/secret pair is wrong.
 - **Logs**: `npx wrangler tail` streams live requests.
 
 ## Who can log in
