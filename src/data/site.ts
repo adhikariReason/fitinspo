@@ -19,7 +19,7 @@ export function path(p: string): string {
  * render time by `amazonLink()`, so no link in the content files has to carry it.
  * Replace with the real tag before launch.
  */
-export const AMAZON_TAG = 'yourtag-20';
+export const AMAZON_TAG = 'fitinspoco1-20';
 
 export const SITE = {
   name: 'Fit Inspo by Kristina',

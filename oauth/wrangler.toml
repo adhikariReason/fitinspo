@@ -1,0 +1,13 @@
+name = "fitinspo-cms-auth"
+main = "src/index.js"
+compatibility_date = "2026-10-07"
+
+# Origins allowed to receive the GitHub token. Nothing else can read it, so
+# keep this list tight: the live site, plus the local dev server for testing.
+[vars]
+ALLOWED_ORIGINS = "https://fitinspobykristina.com,http://localhost:4321"
+
+# GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET are secrets, not vars. Set them with:
+#   npx wrangler secret put GITHUB_CLIENT_ID
+#   npx wrangler secret put GITHUB_CLIENT_SECRET
+# Never put them in this file: it is committed to a public repo.

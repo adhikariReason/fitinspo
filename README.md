@@ -82,16 +82,16 @@ try it without any GitHub configuration.
 
 ### In production (one-time setup)
 
-Decap's GitHub backend cannot complete OAuth from the browser alone, so it needs
-a small OAuth proxy. Before `/admin/` works on the live site:
+`/admin/` on the live site needs an OAuth proxy, because trading a GitHub OAuth
+code for a token requires a client secret that cannot ship in browser code.
 
-1. Create a GitHub OAuth app (Settings → Developer settings → OAuth Apps).
-2. Deploy an OAuth proxy for it. Decap documents several; a Cloudflare Worker or
-   Netlify function is the usual choice. Both are free at this traffic level.
-3. In `public/admin/config.yml`, set `repo:` to your `owner/repo` and `base_url:`
-   to the proxy's URL.
+That proxy lives in [`oauth/`](oauth/) as a Cloudflare Worker — about 120 lines,
+no third-party service in the path, and it stores nothing. Deploying it is three
+commands plus a GitHub OAuth app; the steps are in
+[`oauth/README.md`](oauth/README.md).
 
-Until then, looks can be added by committing Markdown files directly.
+Until it is deployed, looks can be added with the local CMS above, or by
+committing Markdown files directly.
 
 ## Deploying
 
@@ -162,6 +162,7 @@ src/
     disclosure.astro
     search.astro           Stub until Pagefind is wired in
     404.astro
+oauth/                     Cloudflare Worker: GitHub OAuth proxy for the CMS
 public/
   admin/                   Decap CMS
   images/looks/            Hero images (CMS uploads land here)

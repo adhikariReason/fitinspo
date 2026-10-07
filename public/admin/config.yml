@@ -6,9 +6,11 @@ backend:
   name: github
   repo: adhikariReason/fitinspo
   branch: main
-  # Decap cannot talk to GitHub's OAuth endpoint directly from the browser.
-  # Point this at your own OAuth proxy, or delete it if you host one elsewhere.
-  base_url: https://REPLACE-WITH-YOUR-OAUTH-PROXY
+  # Decap runs in the browser and cannot complete GitHub's OAuth exchange on its
+  # own, so it delegates to the Cloudflare Worker in ../../oauth/. Set this to
+  # the URL `wrangler deploy` prints (no trailing slash, no path) — Decap appends
+  # /auth itself. See oauth/README.md.
+  base_url: https://REPLACE-WITH-YOUR-WORKER-URL
 
 # `npx decap-server` + `npm run dev` lets you edit locally without any OAuth.
 local_backend: true
