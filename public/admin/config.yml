@@ -18,7 +18,13 @@ local_backend: true
 media_folder: public/images/looks
 public_folder: /images/looks
 
-publish_mode: editorial_workflow
+# No editorial_workflow on purpose. It puts drafts and their uploaded images on
+# a separate branch, but the live site only serves `main` — so a freshly
+# uploaded photo 404s in the editor until the entry is published. With direct
+# publishing, Save commits to `main`, the deploy runs, and images resolve.
+#
+# Drafting still works per look: tick the `draft` field to keep one out of the
+# built site (see `draft` in src/content.config.ts).
 site_url: https://fitinspobykristina.com
 display_url: https://fitinspobykristina.com
 
@@ -89,7 +95,11 @@ collections:
         media_library:
           config:
             multiple: false
-        hint: The same image as the Pinterest pin. 2:3 portrait.
+        hint: >
+          The same image as the Pinterest pin. 2:3 portrait, around 1000x1500.
+          Use JPG (or WebP/PNG). Avoid TIFF and BMP — they upload but will not
+          display in a browser. Nothing resizes photos, so export a reasonable
+          size rather than uploading straight from the camera.
 
       - label: Hero alt text
         name: hero_alt
@@ -158,7 +168,9 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: Drafts are left out of the built site.
+        hint: >
+          Tick to keep this look off the live site. Everything is still saved and
+          committed — it just is not published until you untick it.
 
       - label: Body (optional)
         name: body
