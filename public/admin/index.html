@@ -14,6 +14,11 @@
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.16.3/dist/decap-cms.js"></script>
+    <!-- Parses the frontmatter pasted into the Quick fill box. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <!-- Decap holds entry data as Immutable structures, so filled-in lists
+         (tags, pieces, colours) have to be Immutable too, not plain arrays. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.8.2/immutable.min.js"></script>
     <script>
       /**
        * Live preview for the editor's right-hand pane.
@@ -148,6 +153,108 @@
         });
 
         CMS.registerPreviewTemplate('looks', LookPreview);
+
+        /* ------------------------------------------------------------------
+         * Quick fill
+         *
+         * Paste a generated look into the "Quick fill" box and press Save: this
+         * parses it and writes every field, including the repeatable pieces
+         * list, then empties the box so it never reaches the saved file.
+         *
+         * This runs on preSave because Decap has no event for live field
+         * updates — preSave is the only hook that can rewrite entry data.
+         * ------------------------------------------------------------------ */
+
+        /** Fields the paste box is allowed to set. Anything else is ignored. */
+        var FILLABLE = [
+          'title', 'slug', 'date', 'category', 'tags', 'note',
+          'hero_image', 'hero_alt', 'placeholder_bg', 'placeholder_ink',
+          'color_story', 'color_story_label', 'intro', 'items', 'related', 'draft',
+        ];
+
+        /** Split `---\nfrontmatter\n---\nbody` into its YAML part. */
+        function frontmatterOf(text) {
+          var match = /^\s*---\r?\n([\s\S]*?)\r?\n---/.exec(text);
+          return match ? match[1] : text;
+        }
+
+        CMS.registerEventListener({
+          name: 'preSave',
+          handler: function (event) {
+            var data = event.entry.get('data');
+            var pasted = data.get('import_md');
+
+            // Nothing pasted: leave the entry exactly as the editor left it,
+            // but make sure the scratch field never lands in the file.
+            if (!pasted || !String(pasted).trim()) {
+              return require_(data.delete('import_md'));
+            }
+
+            var parsed;
+            try {
+              parsed = jsyaml.load(frontmatterOf(String(pasted)));
+            } catch (error) {
+              // Surface the problem instead of silently saving a half-filled
+              // entry. Throwing here cancels the save.
+              throw new Error('Quick fill: could not read that text — ' + error.message);
+            }
+
+            if (!parsed || typeof parsed !== 'object') {
+              throw new Error('Quick fill: that text has no fields in it.');
+            }
+
+            var next = data;
+            FILLABLE.forEach(function (key) {
+              if (parsed[key] === undefined || parsed[key] === null) return;
+              var value = parsed[key];
+              // `date` must be a string for the datetime widget.
+              if (key === 'date' && value instanceof Date) {
+                value = value.toISOString().slice(0, 10);
+              }
+              // Lists and objects must be Immutable or the widgets reject them.
+              next = next.set(key, typeof value === 'object' ? Immutable.fromJS(value) : value);
+            });
+
+            return require_(next.delete('import_md'));
+          },
+        });
+
+        /**
+         * Fields that must be filled by the time a look is saved.
+         *
+         * They are marked `required: false` in config.yml on purpose: Decap
+         * validates widgets *before* preSave runs, so a Quick fill paste would
+         * be rejected for empty fields it was about to populate. Validation
+         * therefore happens here, after the fill, instead of per-widget.
+         */
+        var REQUIRED = {
+          title: 'Title',
+          slug: 'Slug',
+          date: 'Date',
+          category: 'Category',
+          note: 'Handwritten note',
+          hero_image: 'Hero image',
+          hero_alt: 'Hero alt text',
+          intro: 'Intro',
+        };
+
+        function require_(data) {
+          var missing = Object.keys(REQUIRED).filter(function (key) {
+            var value = data.get(key);
+            return value === undefined || value === null || String(value).trim() === '';
+          });
+
+          var items = data.get('items');
+          if (!items || !items.size) missing.push('items');
+
+          if (missing.length) {
+            throw new Error(
+              'Not saved — these are still empty: ' +
+                missing.map(function (k) { return REQUIRED[k] || 'At least one piece to shop'; }).join(', '),
+            );
+          }
+          return data;
+        }
       })();
     </script>
   </body>

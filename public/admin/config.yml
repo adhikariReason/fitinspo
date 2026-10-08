@@ -83,13 +83,25 @@ collections:
       # The preview template is registered in index.html.
       preview: true
     fields:
+      - label: Quick fill (paste, then Save)
+        name: import_md
+        widget: text
+        required: false
+        default: ''
+        hint: >
+          Paste a generated look here and press Save — every field below fills in
+          from it, then stays editable. Nothing from this box is ever saved to
+          the site; it clears itself. Leave it empty to fill the form by hand.
+
       - label: Title
         name: title
+        required: false  # validated in preSave so Quick fill can populate it
         widget: string
         hint: Descriptive and search-friendly, e.g. "Brown + cream coffee date outfit".
 
       - label: Slug (permanent URL)
         name: slug
+        required: false  # validated in preSave so Quick fill can populate it
         widget: string
         pattern:
           - '^[a-z0-9]+(-[a-z0-9]+)*$'
@@ -99,6 +111,7 @@ collections:
 
       - label: Date
         name: date
+        required: false  # validated in preSave so Quick fill can populate it
         widget: datetime
         date_format: YYYY-MM-DD
         time_format: false
@@ -106,6 +119,7 @@ collections:
 
       - label: Category
         name: category
+        required: false  # validated in preSave so Quick fill can populate it
         widget: relation
         collection: categories
         search_fields: [label, slug]
@@ -126,11 +140,13 @@ collections:
 
       - label: Handwritten note
         name: note
+        required: false  # validated in preSave so Quick fill can populate it
         widget: string
         hint: The caption over the photo. Match the text on the pin, e.g. "coffee date outfit ♡".
 
       - label: Hero image
         name: hero_image
+        required: false  # validated in preSave so Quick fill can populate it
         widget: image
         media_library:
           config:
@@ -143,6 +159,7 @@ collections:
 
       - label: Hero alt text
         name: hero_alt
+        required: false  # validated in preSave so Quick fill can populate it
         widget: string
         hint: Describe what is in the photo. Required — this is read aloud and read by Google.
 
@@ -176,11 +193,13 @@ collections:
 
       - label: Intro
         name: intro
+        required: false  # validated in preSave so Quick fill can populate it
         widget: text
         hint: Two sentences. Also used as the meta description and the share text.
 
       - label: Pieces to shop
         name: items
+        required: false  # validated in preSave so Quick fill can populate it
         widget: list
         label_singular: Piece
         summary: '{{fields.name}}'

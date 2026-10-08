@@ -102,6 +102,27 @@ drift from the site. That file is generated, not source, and is gitignored.
 If you add a field that should show up in the preview, add it to the template in
 `public/admin/index.html`.
 
+### Quick fill
+
+The look editor has a **Quick fill** box at the top. Paste a generated look into
+it, press Publish, and every field below is populated from it — including the
+repeatable pieces list — and then stays editable. The pasted text is stripped
+before the file is written, so it never ends up in the repo.
+
+Paste the whole Markdown file; the frontmatter between the `---` markers is what
+gets read, and the body is ignored.
+
+Two things make this work, both in `public/admin/index.html`:
+
+- The fill runs on Decap's `preSave` event. There is no event for live field
+  updates, so fields populate on save rather than as you paste.
+- Decap validates widgets *before* `preSave`, which would reject a paste for the
+  very fields it was about to fill. The required fields are therefore marked
+  `required: false` in `config.yml` and validated in `preSave` instead, which
+  reports everything still missing in one message. If you add a field that must
+  be filled, add it to `REQUIRED` there rather than marking it required in the
+  config.
+
 ### In production (one-time setup)
 
 `/admin/` on the live site needs an OAuth proxy, because trading a GitHub OAuth
