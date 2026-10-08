@@ -8,7 +8,7 @@ tags:
   - classy
   - fall
 note: good days ♡
-hero_image: /images/looks/placeholder.jpg
+hero_image: /images/looks/img_5051.jpg
 hero_alt: Brown ribbed square-neck top with cream pleated wide-leg trousers, a
   brown suede shoulder bag, gold hoops and a coin necklace, and brown and cream
   suede sneakers
