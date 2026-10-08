@@ -8,7 +8,7 @@ tags:
   - winter
   - under-50
 note: slow saturday
-hero_image: /images/looks/cable-knit-wide-leg-denim.svg
+hero_image: /images/looks/img_7269.jpeg
 hero_alt: Cream cable-knit sweater with light wide-leg jeans and white sneakers
 placeholder_bg: "#C9D2D8"
 placeholder_ink: "#2F3A42"
