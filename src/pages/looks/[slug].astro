@@ -3,8 +3,8 @@ import Base from '../../layouts/Base.astro';
 import SaveButton from '../../components/SaveButton.astro';
 import Botanical from '../../components/Botanical.astro';
 import LookTile from '../../components/LookTile.astro';
-import { allLooks, relatedLooks } from '../../data/looks';
-import { SITE, amazonLink, categoryLabel, tagLabel, path, DISCLOSURE_SHORT } from '../../data/site';
+import { allLooks, relatedLooks, categoryLabel } from '../../data/looks';
+import { SITE, amazonLink, tagLabel, path, DISCLOSURE_SHORT } from '../../data/site';
 
 export async function getStaticPaths() {
   const looks = await allLooks();
@@ -15,6 +15,7 @@ export async function getStaticPaths() {
 const { look } = Astro.props;
 const d = look.data;
 const related = await relatedLooks(look, 2);
+const catLabel = await categoryLabel(d.category);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -110,7 +111,7 @@ const jsonLd = {
 
     <nav class="more" aria-label="Browse" style="padding-top:8px">
       <div class="chips" style="padding-left:0;padding-right:0">
-        <a class="chip" href={path(`/category/${d.category}/`)}>{categoryLabel(d.category)}</a>
+        <a class="chip" href={path(`/category/${d.category}/`)}>{catLabel}</a>
         {d.tags.map((t) => <a class="chip" href={path(`/tag/${t}/`)}>{tagLabel(t)}</a>)}
       </div>
     </nav>

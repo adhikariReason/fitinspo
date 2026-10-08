@@ -1,6 +1,41 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Look = CollectionEntry<'looks'>;
+export type Category = { slug: string; label: string; order: number };
+
+/**
+ * Occasions, in display order. Read from the categories collection so they can
+ * be added and renamed in the CMS without a code change.
+ */
+export async function allCategories(): Promise<Category[]> {
+  const entries = await getCollection('categories');
+  return entries
+    .map((e) => ({ slug: e.data.slug, label: e.data.label, order: e.data.order }))
+    .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label));
+}
+
+/** Label for a category slug, falling back to the slug itself. */
+export async function categoryLabel(slug: string): Promise<string> {
+  return (await allCategories()).find((c) => c.slug === slug)?.label ?? slug;
+}
+
+/**
+ * Fails the build if a look points at a category that does not exist, which the
+ * frontmatter schema can no longer catch now that the list is editable content.
+ * A silently unreachable look is worse than a build error.
+ */
+export async function assertCategoriesExist(): Promise<void> {
+  const known = new Set((await allCategories()).map((c) => c.slug));
+  const bad = (await allLooks())
+    .filter((l) => !known.has(l.data.category))
+    .map((l) => `  ${l.data.slug} -> "${l.data.category}"`);
+  if (bad.length) {
+    throw new Error(
+      `These looks reference a category that does not exist in src/content/categories:\n${bad.join('\n')}\n` +
+        `Known categories: ${[...known].join(', ')}`,
+    );
+  }
+}
 
 /** Every published look, newest first. Drafts are excluded from the build. */
 export async function allLooks(): Promise<Look[]> {

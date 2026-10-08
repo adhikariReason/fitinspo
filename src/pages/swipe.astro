@@ -2,13 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Heart from '../components/Heart.astro';
 import { allLooks } from '../data/looks';
-import { CATEGORIES, path } from '../data/site';
+import { path } from '../data/site';
+import { allCategories } from '../data/looks';
 import type { SwipeCategory } from '../scripts/swipe';
 
 const looks = await allLooks();
+const categories_ = await allCategories();
 
 // Grouped by category, in the order from site.ts: that order is the vertical axis.
-const categories: SwipeCategory[] = CATEGORIES.map((c) => ({
+const categories: SwipeCategory[] = categories_.map((c) => ({
   slug: c.slug,
   label: c.label,
   looks: looks

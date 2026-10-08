@@ -29,6 +29,45 @@ site_url: https://fitinspobykristina.com
 display_url: https://fitinspobykristina.com
 
 collections:
+  - name: categories
+    label: Categories
+    label_singular: Category
+    folder: src/content/categories
+    create: true
+    delete: true
+    extension: yml
+    format: yml
+    slug: '{{fields.slug}}'
+    identifier_field: label
+    summary: '{{label}}'
+    sortable_fields: [order, label]
+    editor:
+      preview: false
+    fields:
+      - label: Name
+        name: label
+        widget: string
+        hint: Shown on the chips and the category page, e.g. "Travel".
+
+      - label: Slug (permanent URL)
+        name: slug
+        widget: string
+        pattern:
+          - '^[a-z0-9]+(-[a-z0-9]+)*$'
+          - Lowercase letters, numbers and hyphens only.
+        hint: >
+          Used in the URL, e.g. /category/travel/. NEVER change this once looks
+          are using it — the category page is linkable and pinnable.
+
+      - label: Order
+        name: order
+        widget: number
+        value_type: int
+        default: 99
+        hint: >
+          Low numbers first. Sets the chip order and the up/down order in the
+          swipe browser.
+
   - name: looks
     label: Looks
     label_singular: Look
@@ -67,13 +106,14 @@ collections:
 
       - label: Category
         name: category
-        widget: select
-        options:
-          - { label: 'Coffee date', value: 'coffee-date' }
-          - { label: 'Date night', value: 'date-night' }
-          - { label: 'Work', value: 'work' }
-          - { label: 'Weekend', value: 'weekend' }
-        hint: Occasion. Also the up/down axis in the swipe browser.
+        widget: relation
+        collection: categories
+        search_fields: [label, slug]
+        value_field: slug
+        display_fields: [label]
+        hint: >
+          Occasion, and the up/down axis in the swipe browser. The list comes
+          from the Categories collection — add one there and it shows up here.
 
       - label: Tags
         name: tags

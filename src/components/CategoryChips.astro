@@ -1,5 +1,6 @@
 ---
-import { CATEGORIES, path } from '../data/site';
+import { path } from '../data/site';
+import { allCategories } from '../data/looks';
 
 /**
  * Category filter. These are real links to the category pages rather than a
@@ -10,11 +11,12 @@ interface Props {
   active: string;
 }
 const { active } = Astro.props;
+const categories = await allCategories();
 ---
 <nav class="chips" aria-label="Categories">
   <a class="chip" href={path('/')} aria-current={active === 'all' ? 'page' : undefined}>All</a>
   {
-    CATEGORIES.map((c) => (
+    categories.map((c) => (
       <a class="chip" href={path(`/category/${c.slug}/`)} aria-current={active === c.slug ? 'page' : undefined}>
         {c.label}
       </a>

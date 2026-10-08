@@ -1,7 +1,8 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import SaveButton from './SaveButton.astro';
-import { categoryLabel, path } from '../data/site';
+import { path } from '../data/site';
+import { categoryLabel } from '../data/looks';
 
 interface Props {
   look: CollectionEntry<'looks'>;
@@ -13,6 +14,7 @@ interface Props {
 
 const { look, small = false, eager = false } = Astro.props;
 const d = look.data;
+const label = await categoryLabel(d.category);
 ---
 <article class:list={['tile', small && 'tile--sm']}>
   <a class="tile__link" href={path(`/looks/${d.slug}/`)}>
@@ -29,7 +31,7 @@ const d = look.data;
     </div>
     <div class="tile__meta">
       <span class="tile__title">{d.title}</span>
-      <span class="tile__sub">{categoryLabel(d.category)} · {d.items.length} pieces</span>
+      <span class="tile__sub">{label} · {d.items.length} pieces</span>
     </div>
   </a>
   <SaveButton slug={d.slug} variant="tile" />

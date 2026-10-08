@@ -6,21 +6,22 @@ import CategoryChips from '../../components/CategoryChips.astro';
 import Feed from '../../components/Feed.astro';
 import SwipeBar from '../../components/SwipeBar.astro';
 import { allLooks } from '../../data/looks';
-import { CATEGORIES, categoryLabel, path } from '../../data/site';
+import { path } from '../../data/site';
+import { allCategories } from '../../data/looks';
 
 export async function getStaticPaths() {
   const looks = await allLooks();
+  const categories = await allCategories();
   // Every configured category gets a page, even an empty one, so the URL in a
   // pin never 404s while Kristina is still filling it in.
-  return CATEGORIES.map((c) => ({
+  return categories.map((c) => ({
     params: { category: c.slug },
-    props: { looks: looks.filter((l) => l.data.category === c.slug) },
+    props: { looks: looks.filter((l) => l.data.category === c.slug), label: c.label },
   }));
 }
 
 const { category } = Astro.params;
-const { looks } = Astro.props;
-const label = categoryLabel(category!);
+const { looks, label } = Astro.props;
 ---
 
 <Base

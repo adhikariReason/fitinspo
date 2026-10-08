@@ -2,7 +2,6 @@ import { defineCollection } from 'astro:content';
 // `z` from 'astro:content' is deprecated and goes away in Astro 8.
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
-import { CATEGORY_SLUGS } from './data/site';
 
 const item = z.object({
   name: z.string(),
@@ -23,7 +22,10 @@ const looks = defineCollection({
     title: z.string(),
     slug: z.string(),
     date: z.coerce.date(),
-    category: z.enum(CATEGORY_SLUGS as unknown as [string, ...string[]]),
+    // Validated against the categories collection at build time by
+    // assertCategoriesExist() in src/data/looks.ts, not here: the list of
+    // categories is editable in the CMS, so it is not known to this schema.
+    category: z.string(),
     tags: z.array(z.string()).default([]),
     note: z.string(),
     hero_image: z.string(),
@@ -40,4 +42,24 @@ const looks = defineCollection({
   }),
 });
 
-export const collections = { looks };
+/**
+ * Occasions. Editable in the CMS, which is why they are content rather than a
+ * constant: adding one here gives it a chip, a listing page, a slot in the
+ * swipe browser's vertical axis and an option on every look.
+ */
+const categories = defineCollection({
+  loader: glob({
+    pattern: '**/*.yml',
+    base: './src/content/categories',
+    generateId: ({ data, entry }) =>
+      typeof data.slug === 'string' && data.slug ? data.slug : entry.replace(/\.yml$/, ''),
+  }),
+  schema: z.object({
+    slug: z.string(),
+    label: z.string(),
+    /** Low numbers first. Sets chip order and the swipe browser's vertical order. */
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { looks, categories };

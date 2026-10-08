@@ -56,11 +56,18 @@ export const AMAZON_TAG = 'yourtag-20';
 
 ### Categories
 
-Categories are configured in `src/data/site.ts` and nothing else. Adding one
-there gives it a chip on the home feed, a `/category/<slug>/` page, a slot in
-the swipe browser's vertical axis, and an option in the CMS dropdown — except
-the CMS dropdown, which is a static list in `public/admin/config.yml` and has to
-be updated to match.
+Categories are content, not code: one YAML file per category in
+`src/content/categories/`, editable in the CMS under **Categories**. Adding one
+gives it a chip on the home feed, a `/category/<slug>/` page, a slot in the
+swipe browser's vertical axis, and an option on every look — no code change.
+
+`order` sets the chip order and the up/down order in the swipe browser.
+
+A category's `slug` is a public URL, so it must not change once looks use it.
+If a look ever points at a category that does not exist, the build fails with a
+message naming the look — see `assertCategoriesExist()` in `src/data/looks.ts`.
+That check exists because the frontmatter schema can no longer validate the
+category against a fixed list.
 
 ## Editing with the CMS
 

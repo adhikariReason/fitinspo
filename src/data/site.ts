@@ -31,25 +31,6 @@ export const SITE = {
   pinterest: 'https://www.pinterest.com/crazychristina14/',
 } as const;
 
-/**
- * Occasions. These are also the vertical axis of the swipe browser, so the
- * order here is the order you swipe through. Add "Travel" etc. by adding a row.
- */
-export const CATEGORIES = [
-  { slug: 'coffee-date', label: 'Coffee date' },
-  { slug: 'date-night', label: 'Date night' },
-  { slug: 'work', label: 'Work' },
-  { slug: 'weekend', label: 'Weekend' },
-] as const;
-
-export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
-
-export const CATEGORY_SLUGS = CATEGORIES.map((c) => c.slug);
-
-export function categoryLabel(slug: string): string {
-  return CATEGORIES.find((c) => c.slug === slug)?.label ?? slug;
-}
-
 /** Turn a tag slug into something readable: `brown-and-cream` -> `brown and cream`. */
 export function tagLabel(slug: string): string {
   return slug.replace(/-/g, ' ');

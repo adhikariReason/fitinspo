@@ -6,8 +6,11 @@ import CategoryChips from '../components/CategoryChips.astro';
 import Feed from '../components/Feed.astro';
 import Pager from '../components/Pager.astro';
 import SwipeBar from '../components/SwipeBar.astro';
-import { allLooks, pageSlice } from '../data/looks';
+import { allLooks, pageSlice, assertCategoriesExist } from '../data/looks';
 import { SITE } from '../data/site';
+
+// Fails the build loudly if a look points at a category that no longer exists.
+await assertCategoriesExist();
 
 const { items, total } = pageSlice(await allLooks(), 1);
 ---
