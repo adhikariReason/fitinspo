@@ -5,8 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Fit Inspo — content</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Condensed:wght@400;600;700&family=Karla:wght@400;500;600&family=Nothing+You+Could+Do&display=swap"
+    />
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.16.3/dist/decap-cms.js"></script>
+    <script>
+      /**
+       * Live preview for the editor's right-hand pane.
+       *
+       * Renders a look with the same markup and class names as
+       * src/pages/looks/[slug].astro, over the real design tokens, so what the
+       * editor sees matches what gets published.
+       *
+       * `createClass` and `h` are globals provided by Decap; no build step.
+       */
+      (function () {
+        // The site's own tokens and component CSS, regenerated at build time
+        // from src/styles/global.css. Fonts come from the <head> above.
+        CMS.registerPreviewStyle('/admin/preview.css');
+        CMS.registerPreviewStyle(
+          'https://fonts.googleapis.com/css2?family=Libre+Caslon+Condensed:wght@400;600;700&family=Karla:wght@400;500;600&family=Nothing+You+Could+Do&display=swap',
+        );
+
+        /** Must match DISCLOSURE_SHORT in src/data/site.ts. */
+        var DISCLOSURE =
+          'Fit Inspo by Kristina is reader-supported. As an Amazon Associate, I earn from qualifying purchases.';
+
+        /** Immutable List -> plain array, tolerating undefined. */
+        function list(value) {
+          return value && value.toJS ? value.toJS() : [];
+        }
+
+        var LookPreview = createClass({
+          render: function () {
+            var entry = this.props.entry;
+            var get = function (field) {
+              return entry.getIn(['data', field]);
+            };
+
+            var heroImage = get('hero_image');
+            // A freshly uploaded image is a blob until it is saved, so it has
+            // to go through getAsset rather than being used as a path.
+            var heroSrc = heroImage ? this.props.getAsset(heroImage) : null;
+
+            var bg = get('placeholder_bg') || '#E6D7C4';
+            var ink = get('placeholder_ink') || '#4B3224';
+            var items = list(get('items'));
+            var colors = list(get('color_story'));
+
+            return h(
+              'div',
+              { className: 'shell', style: { paddingBottom: '40px' } },
+
+              // --- hero ---
+              h(
+                'section',
+                { className: 'hero' },
+                h(
+                  'div',
+                  { className: 'hero__frame', style: { background: bg } },
+                  heroSrc
+                    ? h('img', {
+                        className: 'hero__img',
+                        src: heroSrc.toString(),
+                        alt: get('hero_alt') || '',
+                      })
+                    : null,
+                  h(
+                    'span',
+                    { className: 'script hero__note', style: { color: ink } },
+                    get('note') || '',
+                  ),
+                ),
+                h('span', { className: 'hero__wordmark' }, 'Fit Inspo by Kristina'),
+              ),
+
+              // --- title, intro, color story ---
+              h(
+                'section',
+                { className: 'look-intro' },
+                h('h1', {}, get('title') || 'Untitled look'),
+                h('p', {}, get('intro') || ''),
+                colors.length
+                  ? h(
+                      'div',
+                      { className: 'color-story' },
+                      h(
+                        'div',
+                        { className: 'color-story__dots' },
+                        colors.map(function (color, i) {
+                          return h('span', {
+                            key: i,
+                            className: 'color-story__dot',
+                            style: { background: color },
+                          });
+                        }),
+                      ),
+                      get('color_story_label')
+                        ? h(
+                            'span',
+                            { className: 'color-story__label' },
+                            'Color story: ' + get('color_story_label'),
+                          )
+                        : null,
+                    )
+                  : null,
+              ),
+
+              // --- shop the look ---
+              h(
+                'section',
+                { className: 'shop-panel' },
+                h('h2', {}, 'Shop the look'),
+                items.length
+                  ? items.map(function (item, i) {
+                      return h(
+                        'div',
+                        { className: 'shop-row', key: i },
+                        h(
+                          'div',
+                          { className: 'shop-row__text' },
+                          h('span', { className: 'shop-row__name' }, item.name || 'Unnamed piece'),
+                          h('span', { className: 'shop-row__note' }, item.note || ''),
+                        ),
+                        h('span', { className: 'btn-shop' }, 'Shop on Amazon'),
+                      );
+                    })
+                  : h(
+                      'p',
+                      { className: 'shop-row__note' },
+                      'No pieces yet. Add one under “Pieces to shop”.',
+                    ),
+                h('p', { className: 'disclosure-line' }, DISCLOSURE),
+              ),
+            );
+          },
+        });
+
+        CMS.registerPreviewTemplate('looks', LookPreview);
+      })();
+    </script>
   </body>
 </html>

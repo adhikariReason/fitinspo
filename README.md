@@ -80,6 +80,21 @@ Then open <http://localhost:4321/admin/>. `local_backend: true` in
 `public/admin/config.yml` makes Decap write to your working copy, so you can
 try it without any GitHub configuration.
 
+### The editor
+
+The entry editor is split: fields on the left, a live preview of the look on the
+right, updating as you type. The preview is a custom template registered in
+`public/admin/index.html`, using the same markup and class names as
+`src/pages/looks/[slug].astro`.
+
+It styles itself with the site's real tokens. `public/admin/preview.css` is
+generated from `src/styles/global.css` by `scripts/sync-preview-css.mjs`, which
+runs automatically on `npm run dev` and `npm run build` — so the preview cannot
+drift from the site. That file is generated, not source, and is gitignored.
+
+If you add a field that should show up in the preview, add it to the template in
+`public/admin/index.html`.
+
 ### In production (one-time setup)
 
 `/admin/` on the live site needs an OAuth proxy, because trading a GitHub OAuth

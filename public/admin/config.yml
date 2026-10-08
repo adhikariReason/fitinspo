@@ -34,7 +34,9 @@ collections:
     summary: '{{title}} — {{category}}'
     sortable_fields: [date, title, category]
     editor:
-      preview: false
+      # Side-by-side: fields on the left, live rendered look on the right.
+      # The preview template is registered in index.html.
+      preview: true
     fields:
       - label: Title
         name: title

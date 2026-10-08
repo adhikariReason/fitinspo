@@ -4,11 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "dev": "npm run sync:preview-css && astro dev",
+    "start": "npm run dev",
+    "build": "npm run sync:preview-css && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "sync:preview-css": "node scripts/sync-preview-css.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

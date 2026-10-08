@@ -5,3 +5,6 @@ node_modules/
 *.log
 .env
 .env.production
+
+# Generated from src/styles/global.css by scripts/sync-preview-css.mjs
+public/admin/preview.css
